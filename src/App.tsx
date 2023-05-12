@@ -20,7 +20,7 @@ const BiggerBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
 
 // 박스
@@ -47,6 +47,8 @@ function App() {
       <BiggerBox ref={biggerBoxRef}>
         <Box
           drag
+          dragElastic={0.5} // 값이 작을수록 무거운 용수철
+          dragSnapToOrigin
           dragConstraints={biggerBoxRef} // (300 - 중앙박스의 절반)
           variants={boxVariants}
           whileHover="hover" // hover시 90도 z축 회전, 1.2배 커짐
