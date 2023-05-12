@@ -25,13 +25,12 @@ function App() {
   
 // useEffect 사용으로 x값 추적하기
 // x값이 바뀔때마다 x값이 콘솔에 찍혀나옴.
-  useEffect(() => {
-    x.on("change", () => console.log(x.get()));
-  }, [x]);
-
-
+  // useEffect(() => {
+  //   x.on("change", () => console.log(x.get()));
+  // }, [x]);
   return (
     <Wrapper>
+      <button onClick={() => x.set(200)}>click me</button>
       <Box style={{ x }} drag="x" dragSnapToOrigin></Box>
     </Wrapper>
   );
