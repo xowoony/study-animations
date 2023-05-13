@@ -1,6 +1,5 @@
 import { styled } from "styled-components";
-import { motion, useMotionValue } from "framer-motion";
-import { useEffect } from "react";
+import { motion, useMotionValue, useMotionValueEvent, useTransform } from "framer-motion";
 
 // style
 const Wrapper = styled.div`
@@ -20,18 +19,22 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
+// x값을 가지고 transform => useTransform 훅을 사용
+// -800일 때 : scale이 2가 되도록 하고,
+// 0일 때 : scale이 1이 되도록 하고,
+// 800일 때 : scale이 0이 되도록
 function App() {
-  const x = useMotionValue(0);
-  
-// useEffect 사용으로 x값 추적하기
-// x값이 바뀔때마다 x값이 콘솔에 찍혀나옴.
-  // useEffect(() => {
-  //   x.on("change", () => console.log(x.get()));
-  // }, [x]);
+  const x = useMotionValue(0); // x값은 드래그할 때마다 새로 값이 설정됨
+  // useTransform : 값 3개를 적어주어야 함.
+  // 1.  값 : x
+  // 2.  x가 ___일 때 라는 의미 : 배열 [-800, 0, 800]
+  // 3.  출력 : 배열을 적어줌 [2, 1, 0.1]
+  const scaleValue = useTransform(x, [-800, 0, 800], [2, 1, 0.1]);
+  // useEffect 대신 useMotionValueEvent 사용
+  useMotionValueEvent(scaleValue, "change", (el) => console.log(el));
   return (
     <Wrapper>
-      <button onClick={() => x.set(200)}>click me</button>
-      <Box style={{ x }} drag="x" dragSnapToOrigin></Box>
+      <Box style={{ x, scale:scaleValue }} drag="x" dragSnapToOrigin></Box>
     </Wrapper>
   );
 }
