@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { motion, useMotionValue, useMotionValueEvent, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 
 // style
 const Wrapper = styled.div`
@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  background:linear-gradient(135deg,#d3a8c4,#83c2fc);
 `;
 
 // 박스
@@ -29,12 +30,10 @@ function App() {
   // 1.  값 : x
   // 2.  x가 ___일 때 라는 의미 : 배열 [-800, 0, 800]
   // 3.  출력 : 배열을 적어줌 [2, 1, 0.1]
-  const scaleValue = useTransform(x, [-800, 0, 800], [2, 1, 0.1]);
-  // useEffect 대신 useMotionValueEvent 사용
-  useMotionValueEvent(scaleValue, "change", (el) => console.log(el));
+  const rotateValue = useTransform(x, [-800, 800], [-360, 360]);
   return (
     <Wrapper>
-      <Box style={{ x, scale:scaleValue }} drag="x" dragSnapToOrigin></Box>
+      <Box style={{ x, rotateZ:rotateValue }} drag="x" dragSnapToOrigin></Box>
     </Wrapper>
   );
 }
