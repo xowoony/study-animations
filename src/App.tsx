@@ -2,13 +2,12 @@ import { styled } from "styled-components";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 
 // style
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  background:linear-gradient(135deg,#d3a8c4,#83c2fc);
 `;
 
 // 박스
@@ -20,20 +19,20 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-// x값을 가지고 transform => useTransform 훅을 사용
-// -800일 때 : scale이 2가 되도록 하고,
-// 0일 때 : scale이 1이 되도록 하고,
-// 800일 때 : scale이 0이 되도록
 function App() {
-  const x = useMotionValue(0); // x값은 드래그할 때마다 새로 값이 설정됨
-  // useTransform : 값 3개를 적어주어야 함.
-  // 1.  값 : x
-  // 2.  x가 ___일 때 라는 의미 : 배열 [-800, 0, 800]
-  // 3.  출력 : 배열을 적어줌 [2, 1, 0.1]
-  const rotateValue = useTransform(x, [-800, 800], [-360, 360]);
+  const x = useMotionValue(0);
+  const rotateZ = useTransform(x, [-800, 800], [-360, 360]);
+  const gradient = useTransform(
+    x,
+    [-800, 800],
+    [
+      "linear-gradient(135deg, rgb(0, 210, 238), rgb(22, 103, 135))",
+      "linear-gradient(135deg, rgb(52, 178, 145), rgb(212, 212, 107))",
+    ]
+  );
   return (
-    <Wrapper>
-      <Box style={{ x, rotateZ:rotateValue }} drag="x" dragSnapToOrigin></Box>
+    <Wrapper style={{ background: gradient }}>
+      <Box style={{ x, rotateZ: rotateZ }} drag="x" dragSnapToOrigin></Box>
     </Wrapper>
   );
 }
