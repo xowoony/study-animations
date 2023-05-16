@@ -72,7 +72,8 @@ function App() {
 
   return (
     <Wrapper>
-      <AnimatePresence custom={back}>
+      {/* mode="wait" 을 작성하면 1번박스가 완전히 사라진 후 2번박스가 나타나게 된다.*/}
+      <AnimatePresence  mode="wait" custom={back}>
         <Box
           custom={back} // custom에 back을 넣어준다. 여기는 true 또는 false가 될 것이다.
           variants={BoxVariants}
