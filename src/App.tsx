@@ -32,48 +32,60 @@ const Box = styled(motion.div)`
 `;
 
 const BoxVariants = {
-  invisible: {
-    x: 500,
+  // entry를 function으로 만들어준다.
+  // 밑에 Box 컴포넌트 안 custom={back}과 (back: boolean) 이 둘의 이름이 달라도 상관은 없다.
+  entry: (back: boolean) => ({
+    x: back ? -500 : 500,
     opacity: 0,
     scale: 0,
-  },
-  visible: {
+  }),
+
+  center: {
     x: 0,
     opacity: 1,
     scale: 1,
     transition: { duration: 0.7 },
   },
-  exit: {
-    x: -500,
+
+  // exit을 function으로 만들어준다.
+  // 밑에 Box 컴포넌트 안 custom={back}과 (back: boolean) 이 둘의 이름이 달라도 상관은 없다.
+  exit: (back: boolean) => ({
+    x: back ? 500 : -500,
     opacity: 0,
     scale: 0,
     transition: { duration: 0.7 },
-  },
+  }),
 };
 
 function App() {
   const [visible, setVisible] = useState(1);
-  const nextToggle = () => setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  const [back, setBack] = useState(false);
+
+  const nextToggle = () => {
+    setBack(false); // next버튼을 눌렀을 때에는 setBack을 fasle로
+    setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  };
+  const prevToggle = () => {
+    setBack(true); // prev버튼을 눌렀을 때에는 setBack을 true로
+    setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+  };
 
   return (
     <Wrapper>
-      <AnimatePresence>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
-          i === visible ? (
-            <Box
-              variants={BoxVariants}
-              initial="invisible"
-              animate="visible"
-              exit="exit"
-              key={i}
-            >
-              {i}
-            </Box>
-          ) : null
-        )}
-        s
+      <AnimatePresence custom={back}>
+        <Box
+          custom={back} // custom에 back을 넣어준다. 여기는 true 또는 false가 될 것이다.
+          variants={BoxVariants}
+          initial="entry"
+          animate="center"
+          exit="exit"
+          key={visible}
+        >
+          {visible}
+        </Box>
       </AnimatePresence>
       <button onClick={nextToggle}>next</button>
+      <button onClick={prevToggle}>prev</button>
     </Wrapper>
   );
 }
